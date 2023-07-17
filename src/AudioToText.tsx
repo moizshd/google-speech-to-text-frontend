@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { default as React, useEffect, useState, useRef } from "react";
-import { Button } from "react-bootstrap";
-import Container from "react-bootstrap/Container";
+import { Button, Container, ListGroup } from "react-bootstrap";
 import * as io from "socket.io-client";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMicrophone, faStop, faVolumeUp } from '@fortawesome/free-solid-svg-icons'
 
 const sampleRate = 16000;
 
@@ -133,31 +134,42 @@ const AudioToText: React.FC = () => {
 
   return (
     <React.Fragment>
-      <Container className="py-5 text-center">
-        <Container fluid className="py-5 bg-primary text-light text-center ">
-          <Container>
-            <Button
-              className={isRecording ? "btn-danger" : "btn-outline-light"}
-              onClick={connect}
-              disabled={isRecording}
-            >
-              Start
-            </Button>
-            <Button
-              className="btn-outline-light"
-              onClick={disconnect}
-              disabled={!isRecording}
-            >
-              Stop
-            </Button>
-          </Container>
-        </Container>
-        <Container className="py-5 text-center">
-          {recognitionHistory.map((tx, idx) => (
-            <p key={idx}>{tx}</p>
-          ))}
-          <p>{currentRecognition}</p>
-        </Container>
+      <Container className="py-5">
+        <div className="text-center">
+          <h1 className="mb-5">Audio To Text</h1>
+          <Button
+            variant={isRecording ? "danger" : "primary"}
+            onClick={connect}
+            disabled={isRecording}
+            className="mr-2"
+          >
+            <FontAwesomeIcon icon={faMicrophone} className="mr-2" />
+            Start
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={disconnect}
+            disabled={!isRecording}
+          >
+            <FontAwesomeIcon icon={faStop} className="mr-2" />
+            Stop
+          </Button>
+        </div>
+        <div className="mt-5">
+          <h2 className="text-center mb-4">Recognition History</h2>
+          <ListGroup variant="flush">
+            {recognitionHistory.map((tx, idx) => (
+              <ListGroup.Item key={idx}>
+                <FontAwesomeIcon icon={faVolumeUp} className="mr-2" />
+                {tx}
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
+          <div className="mt-3 text-center">
+            <h4>Current Recognition</h4>
+            <p>{currentRecognition}</p>
+          </div>
+        </div>
       </Container>
     </React.Fragment>
   );
